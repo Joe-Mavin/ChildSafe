@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lost Child Search</title>
+</head>
+<body>
+    <h1>Search for Lost Child</h1>
+    <form action="{{ url_for('search_lost_child') }}" method="post" enctype="multipart/form-data">
+        <label for="lost_child_photo">Upload Lost Child Photo:</label><br>
+        <input type="file" id="lost_child_photo" name="lost_child_photo" accept="image/*" required><br><br>
+        <input type="submit" value="Search">
+    </form>
+</body>
+</html>

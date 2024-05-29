@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Child Information</title>
+    <style>
+        /* CSS to style the layout */
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+        }
+        .child-info {
+            max-width: 600px;
+            margin: auto;
+            padding: 20px;
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        }
+        .child-info h1 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .child-info p {
+            margin-bottom: 10px;
+        }
+        .child-picture {
+            max-width: 40%;
+            height: auto;
+            border-radius: 8px;
+            box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+<body>
+    <div class="child-info">
+        <h1>Child Information</h1>
+        <div>
+            <h2>{{ child.first_name }} {{ child.last_name }}</h2>
+            <p><strong>Huduma Number:</strong> {{ child.huduma_number }}</p>
+            <p><strong>Date of Birth:</strong> {{ child.date_of_birth }}</p>
+            <p><strong>Gender:</strong> {{ child.gender }}</p>
+            <p><strong>Mother's Name:</strong> {{ child.mother_first_name }} {{ child.mother_last_name }}</p>
+            <p><strong>Father's Name:</strong> {{ child.father_first_name }} {{ child.father_last_name }}</p>
+            <p><strong>Mother's Contact:</strong> {{ child.mother_contact }}</p>
+            <p><strong>Father's Contact:</strong> {{ child.father_contact }}</p>
+            <p><strong>County:</strong> {{ child.county }}</p>
+            <p><strong>Sub-County:</strong> {{ child.sub_county }}</p>
+            <p><strong>Ward:</strong> {{ child.ward }}</p>
+            {% if child.picture_path %}
+                <img src="{{ child.picture_path }}" class="child-picture" alt="Child Picture">
+            {% else %}
+                <p>No picture available</p>
+            {% endif %}
+        </div>
+    </div>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
