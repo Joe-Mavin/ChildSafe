@@ -1,5 +1,9 @@
 ChildSafe: Child Registration and Identification System
+
+
 Table of Contents
+
+
 Introduction
 Features
 Installation
