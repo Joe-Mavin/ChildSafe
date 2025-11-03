@@ -2,10 +2,14 @@ services:
   - type: web
     name: safefind
     env: python
+    region: oregon
+    plan: free
     buildCommand: "pip install -r requirements.txt"
-    startCommand: "gunicorn app_simple:app --bind 0.0.0.0:$PORT"
+    startCommand: "gunicorn app_simple:app --bind 0.0.0.0:$PORT --workers 2"
     envVars:
       - key: PYTHON_VERSION
         value: 3.11.9
       - key: SECRET_KEY
         generateValue: true
+      - key: DEBUG
+        value: False
