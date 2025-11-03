@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SafeFind - Advanced Missing Persons System</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='modern_styles.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <a href="#" class="navbar-brand">
+                    <i class="fas fa-shield-heart"></i> SafeFind
+                </a>
+                <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+                    <!-- Role-based Login Options -->
+                    <div class="dropdown" style="position: relative;">
+                        <button class="btn btn-primary" onclick="toggleDropdown()" id="loginDropdown">
+                            <i class="fas fa-sign-in-alt"></i> Login <i class="fas fa-chevron-down"></i>
+                        </button>
+                        <div class="dropdown-menu" id="dropdownMenu" style="display: none; position: absolute; top: 100%; right: 0; background: rgba(255,255,255,0.95); backdrop-filter: blur(10px); border-radius: 12px; padding: 0.5rem; min-width: 200px; box-shadow: 0 8px 32px rgba(0,0,0,0.1); z-index: 1000;">
+                            <a href="{{ url_for('login', role='admin') }}" class="dropdown-item" style="display: block; padding: 0.75rem 1rem; text-decoration: none; color: #2c3e50; border-radius: 8px; margin-bottom: 0.25rem; transition: all 0.2s;">
+                                <i class="fas fa-crown" style="color: #f39c12;"></i> Admin Login
+                            </a>
+                            <a href="{{ url_for('login', role='user') }}" class="dropdown-item" style="display: block; padding: 0.75rem 1rem; text-decoration: none; color: #2c3e50; border-radius: 8px; transition: all 0.2s;">
+                                <i class="fas fa-user" style="color: #3498db;"></i> User Login
+                            </a>
+                        </div>
+                    </div>
+                    <a href="{{ url_for('register') }}" class="btn btn-success">
+                        <i class="fas fa-user-plus"></i> Register
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <h1>
+                <i class="fas fa-search-location"></i>
+                Advanced Missing Persons System
+            </h1>
+            <p>
+                Powered by state-of-the-art AI face recognition technology to help reunite families 
+                and locate missing children, adults, and individuals with special needs.
+            </p>
+            
+            <!-- Feature Cards -->
+            <div class="stats-grid" style="margin-top: 3rem;">
+                <div class="stat-card glass-card">
+                    <div class="stat-number">
+                        <i class="fas fa-child"></i>
+                    </div>
+                    <h3>Missing Children</h3>
+                    <p>Comprehensive child registration and identification system</p>
+                </div>
+                
+                <div class="stat-card glass-card">
+                    <div class="stat-number">
+                        <i class="fas fa-user-injured"></i>
+                    </div>
+                    <h3>Vulnerable Adults</h3>
+                    <p>Support for mentally unstable individuals and those with special needs</p>
+                </div>
+                
+                <div class="stat-card glass-card">
+                    <div class="stat-number">
+                        <i class="fas fa-brain"></i>
+                    </div>
+                    <h3>AI-Powered</h3>
+                    <p>DeepFace technology with 99%+ accuracy for facial recognition</p>
+                </div>
+                
+                <div class="stat-card glass-card">
+                    <div class="stat-number">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <h3>Real-Time</h3>
+                    <p>Instant matching and alerts for faster reunification</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section style="padding: 4rem 0; background: rgba(255,255,255,0.1);">
+        <div class="container">
+            <div style="text-align: center; margin-bottom: 3rem;">
+                <h2 style="color: white; font-size: 2.5rem; margin-bottom: 1rem;">
+                    Comprehensive Missing Persons Solutions
+                </h2>
+                <p style="color: rgba(255,255,255,0.8); font-size: 1.2rem; max-width: 600px; margin: 0 auto;">
+                    Our advanced system supports multiple categories of missing persons with specialized features for each case type.
+                </p>
+            </div>
+            
+            <div class="dashboard-grid">
+                <!-- Children -->
+                <div class="dashboard-card glass-card">
+                    <div style="text-align: center; margin-bottom: 1.5rem;">
+                        <div style="font-size: 3rem; color: #667eea; margin-bottom: 1rem;">
+                            <i class="fas fa-baby"></i>
+                        </div>
+                        <h3 style="color: #2c3e50; margin-bottom: 0.5rem;">Missing Children</h3>
+                        <p style="color: #666; margin-bottom: 1.5rem;">
+                            Specialized system for children with guardian information, medical details, and priority handling.
+                        </p>
+                    </div>
+                    <ul style="list-style: none; padding: 0; margin-bottom: 1.5rem;">
+                        <li style="padding: 0.5rem 0; border-bottom: 1px solid #eee;">
+                            <i class="fas fa-check" style="color: #43e97b; margin-right: 0.5rem;"></i>
+                            Guardian contact information
+                        </li>
+                        <li style="padding: 0.5rem 0; border-bottom: 1px solid #eee;">
+                            <i class="fas fa-check" style="color: #43e97b; margin-right: 0.5rem;"></i>
+                            School and medical records
+                        </li>
+                        <li style="padding: 0.5rem 0; border-bottom: 1px solid #eee;">
+                            <i class="fas fa-check" style="color: #43e97b; margin-right: 0.5rem;"></i>
+                            Age-appropriate search protocols
+                        </li>
+                        <li style="padding: 0.5rem 0;">
+                            <i class="fas fa-check" style="color: #43e97b; margin-right: 0.5rem;"></i>
+                            Amber Alert integration ready
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Adults with Mental Health Issues -->
+                <div class="dashboard-card glass-card">
+                    <div style="text-align: center; margin-bottom: 1.5rem;">
+                        <div style="font-size: 3rem; color: #4facfe; margin-bottom: 1rem;">
+                            <i class="fas fa-user-nurse"></i>
+                        </div>
+                        <h3 style="color: #2c3e50; margin-bottom: 0.5rem;">Vulnerable Adults</h3>
+                        <p style="color: #666; margin-bottom: 1.5rem;">
+                            Comprehensive support for individuals with mental health conditions, dementia, or cognitive impairments.
+                        </p>
+                    </div>
+                    <ul style="list-style: none; padding: 0; margin-bottom: 1.5rem;">
+                        <li style="padding: 0.5rem 0; border-bottom: 1px solid #eee;">
+                            <i class="fas fa-check" style="color: #43e97b; margin-right: 0.5rem;"></i>
+                            Medical condition tracking
+                        </li>
+                        <li style="padding: 0.5rem 0; border-bottom: 1px solid #eee;">
+                            <i class="fas fa-check" style="color: #43e97b; margin-right: 0.5rem;"></i>
+                            Medication requirements
+                        </li>
+                        <li style="padding: 0.5rem 0; border-bottom: 1px solid #eee;">
+                            <i class="fas fa-check" style="color: #43e97b; margin-right: 0.5rem;"></i>
+                            Behavioral patterns
+                        </li>
+                        <li style="padding: 0.5rem 0;">
+                            <i class="fas fa-check" style="color: #43e97b; margin-right: 0.5rem;"></i>
+                            Emergency medical contacts
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- General Missing Persons -->
+                <div class="dashboard-card glass-card">
+                    <div style="text-align: center; margin-bottom: 1.5rem;">
+                        <div style="font-size: 3rem; color: #43e97b; margin-bottom: 1rem;">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <h3 style="color: #2c3e50; margin-bottom: 0.5rem;">General Cases</h3>
+                        <p style="color: #666; margin-bottom: 1.5rem;">
+                            Standard missing person cases with comprehensive tracking and investigation support.
+                        </p>
+                    </div>
+                    <ul style="list-style: none; padding: 0; margin-bottom: 1.5rem;">
+                        <li style="padding: 0.5rem 0; border-bottom: 1px solid #eee;">
+                            <i class="fas fa-check" style="color: #43e97b; margin-right: 0.5rem;"></i>
+                            Last known location tracking
+                        </li>
+                        <li style="padding: 0.5rem 0; border-bottom: 1px solid #eee;">
+                            <i class="fas fa-check" style="color: #43e97b; margin-right: 0.5rem;"></i>
+                            Timeline reconstruction
+                        </li>
+                        <li style="padding: 0.5rem 0; border-bottom: 1px solid #eee;">
+                            <i class="fas fa-check" style="color: #43e97b; margin-right: 0.5rem;"></i>
+                            Multi-agency coordination
+                        </li>
+                        <li style="padding: 0.5rem 0;">
+                            <i class="fas fa-check" style="color: #43e97b; margin-right: 0.5rem;"></i>
+                            Public alert system
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Technology Section -->
+    <section style="padding: 4rem 0;">
+        <div class="container">
+            <div style="text-align: center; margin-bottom: 3rem;">
+                <h2 style="color: white; font-size: 2.5rem; margin-bottom: 1rem;">
+                    <i class="fas fa-robot"></i> Powered by Advanced AI
+                </h2>
+                <p style="color: rgba(255,255,255,0.8); font-size: 1.2rem;">
+                    Our system uses DeepFace technology for unparalleled accuracy in facial recognition and matching.
+                </p>
+            </div>
+            
+            <div class="stats-grid">
+                <div class="stat-card glass-card">
+                    <div class="stat-number">99.3%</div>
+                    <h4>Accuracy Rate</h4>
+                    <p>State-of-the-art facial recognition with DeepFace neural networks</p>
+                </div>
+                
+                <div class="stat-card glass-card">
+                    <div class="stat-number">&lt;2s</div>
+                    <h4>Search Speed</h4>
+                    <p>Lightning-fast matching against entire database</p>
+                </div>
+                
+                <div class="stat-card glass-card">
+                    <div class="stat-number">24/7</div>
+                    <h4>Availability</h4>
+                    <p>Round-the-clock system availability for urgent cases</p>
+                </div>
+                
+                <div class="stat-card glass-card">
+                    <div class="stat-number">100%</div>
+                    <h4>Privacy</h4>
+                    <p>Local processing ensures complete data privacy and security</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Call to Action -->
+    <section style="padding: 4rem 0; background: rgba(255,255,255,0.1);">
+        <div class="container" style="text-align: center;">
+            <h2 style="color: white; font-size: 2.5rem; margin-bottom: 1rem;">
+                Ready to Help Find Missing Persons?
+            </h2>
+            <p style="color: rgba(255,255,255,0.8); font-size: 1.2rem; margin-bottom: 2rem;">
+                Join our network of dedicated professionals working to reunite families and locate missing individuals.
+            </p>
+            <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+                <a href="{{ url_for('register') }}" class="btn btn-success" style="font-size: 1.1rem; padding: 1rem 2rem;">
+                    <i class="fas fa-user-plus"></i> Get Started Now
+                </a>
+                <a href="{{ url_for('login', role='admin') }}" class="btn btn-primary" style="font-size: 1.1rem; padding: 1rem 2rem;">
+                    <i class="fas fa-crown"></i> Admin Login
+                </a>
+                <a href="{{ url_for('login', role='user') }}" class="btn btn-primary" style="font-size: 1.1rem; padding: 1rem 2rem;">
+                    <i class="fas fa-user"></i> User Login
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer style="padding: 2rem 0; background: rgba(0,0,0,0.2); color: rgba(255,255,255,0.8); text-align: center;">
+        <div class="container">
+            <p>&copy; 2024 SafeFind - Advanced Missing Persons System. Powered by DeepFace AI Technology.</p>
+            <p style="margin-top: 0.5rem; font-size: 0.9rem;">
+                <i class="fas fa-shield-alt"></i> Secure • <i class="fas fa-lock"></i> Private • <i class="fas fa-heart"></i> Compassionate
+            </p>
+        </div>
+    </footer>
+
+    <!-- Floating Emergency Button -->
+    <button class="fab" onclick="showEmergencyInfo()" title="Emergency Contacts">
+        <i class="fas fa-phone"></i>
+    </button>
+
+    <script>
+        // Toggle dropdown menu for role-based login
+        function toggleDropdown() {
+            const dropdown = document.getElementById('dropdownMenu');
+            dropdown.style.display = dropdown.style.display === 'none' ? 'block' : 'none';
+        }
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', function(event) {
+            const dropdown = document.getElementById('dropdownMenu');
+            const button = document.getElementById('loginDropdown');
+            
+            if (dropdown && button && !button.contains(event.target) && !dropdown.contains(event.target)) {
+                dropdown.style.display = 'none';
+            }
+        });
+
+        // Add hover effects to dropdown items
+        document.addEventListener('DOMContentLoaded', function() {
+            const dropdownItems = document.querySelectorAll('.dropdown-item');
+            dropdownItems.forEach(item => {
+                item.addEventListener('mouseenter', function() {
+                    this.style.background = 'rgba(102, 126, 234, 0.1)';
+                    this.style.transform = 'translateX(5px)';
+                });
+                item.addEventListener('mouseleave', function() {
+                    this.style.background = 'transparent';
+                    this.style.transform = 'translateX(0)';
+                });
+            });
+        });
+
+        function showEmergencyInfo() {
+            alert('Emergency Contacts:\n\n' +
+                  '🚨 Police: 999\n' +
+                  '🏥 Medical Emergency: 911\n' +
+                  '📞 Missing Persons Hotline: 0800-MISSING\n\n' +
+                  'For immediate assistance, contact local authorities.');
+        }
+
+        // Add smooth scrolling and animations
+        document.addEventListener('DOMContentLoaded', function() {
+            // Animate cards on scroll
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            };
+
+            const observer = new IntersectionObserver(function(entries) {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateY(0)';
+                    }
+                });
+            }, observerOptions);
+
+            // Observe all cards
+            document.querySelectorAll('.stat-card, .dashboard-card').forEach(card => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(30px)';
+                card.style.transition = 'all 0.6s ease';
+                observer.observe(card);
+            });
+        });
+    </script>
+</body>
+</html>

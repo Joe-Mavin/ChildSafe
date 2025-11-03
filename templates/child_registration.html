@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
+    <title>Child Registration</title>
+    <style>
+        body {
+            font-family: 'Open Sans', sans-serif;
+            background-color: #f8f9fa;
+            padding-top: 50px;
+        }
+        .container {
+            max-width: 600px;
+            margin: auto;
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        label {
+            font-weight: bold;
+            color: #007bff;
+        }
+        .btn-primary {
+            background-color: #007bff;
+            border: none;
+        }
+        .btn-primary:hover {
+            background-color: #0056b3;
+        }
+        nav ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        nav ul li {
+            display: inline;
+            margin-right: 10px;
+        }
+        nav ul li a {
+            text-decoration: none;
+            color: #007bff;
+        }
+        nav ul li a:hover {
+            color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="text-center">Child Registration</h1>
+
+        <!-- Display flash messages -->
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+        <div class="alert alert-info">
+            <ul>
+                {% for message in messages %}
+                <li>{{ message }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+        {% endif %}
+        {% endwith %}
+
+        <form method="POST" action="/register_child" enctype="multipart/form-data">
+            <!-- Child's Details -->
+            <div class="form-group">
+                <label for="first_name">Child's First Name:</label>
+                <input type="text" class="form-control" name="first_name" required>
+            </div>
+            <div class="form-group">
+                <label for="last_name">Child's Last Name:</label>
+                <input type="text" class="form-control" name="last_name" required>
+            </div>
+            <div class="form-group">
+                <label for="huduma_number">Child's Huduma Number:</label>
+                <input type="text" class="form-control" name="huduma_number" required>
+            </div>
+            <div class="form-group">
+                <label for="dob">Child's Date of Birth (DOB):</label>
+                <input type="date" class="form-control" name="dob" required>
+            </div>
+
+            <!-- Gender -->
+            <div class="form-group">
+                <label for="gender">Child's Gender:</label>
+                <select class="form-control" name="gender" required>
+                    <option value="male">Male</option>
+                    <option value="female">Female</option>
+                    <option value="other">Other</option>
+                </select>
+            </div>
+
+            <!-- Parents' Details -->
+            <h3>Parents' Details</h3>
+            <div class="form-group">
+                <label for="mother_first_name">Mother's First Name:</label>
+                <input type="text" class="form-control" name="mother_first_name" required>
+            </div>
+            <div class="form-group">
+                <label for="mother_last_name">Mother's Last Name:</label>
+                <input type="text" class="form-control" name="mother_last_name" required>
+            </div>
+            <div class="form-group">
+                <label for="father_first_name">Father's First Name:</label>
+                <input type="text" class="form-control" name="father_first_name" required>
+            </div>
+            <div class="form-group">
+                <label for="father_last_name">Father's Last Name:</label>
+                <input type="text" class="form-control" name="father_last_name" required>
+            </div>
+            <div class="form-group">
+                <label for="mother_contact">Mother's Contact:</label>
+                <input type="text" class="form-control" name="mother_contact" required>
+            </div>
+            <div class="form-group">
+                <label for="father_contact">Father's Contact:</label>
+                <input type="text" class="form-control" name="father_contact" required>
+            </div>
+
+            <!-- Location Details -->
+            <h3>Location Details</h3>
+            <div class="form-group">
+                <label for="county">County:</label>
+                <input type="text" class="form-control" name="county">
+            </div>
+            <div class="form-group">
+                <label for="sub_county">Sub-County:</label>
+                <input type="text" class="form-control" name="sub_county">
+            </div>
+            <div class="form-group">
+                <label for="ward">Ward:</label>
+                <input type="text" class="form-control" name="ward">
+            </div>
+
+            <!-- Child's Photo -->
+            <div class="form-group">
+                <label for="photo">Child's Photo (optional):</label>
+                <input type="file" class="form-control-file" name="photo">
+            </div>
+
+            <button class="btn btn-primary btn-block" type="submit">Register Child</button>
+        </form>
+
+        <nav>
+            <ul>
+                <li><a href="/">Home</a></li>
+                <li><a href="/search">Search</a></li>
+                <li><a href="/reports">Reports</a></li>
+            </ul>
+        </nav>
+    </div>
+</body>
+</html>

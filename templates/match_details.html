@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Match Found - ChildSafe</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        .match-container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            margin: 2rem auto;
+            max-width: 800px;
+            overflow: hidden;
+        }
+        .match-header {
+            background: linear-gradient(135deg, #28a745, #20c997);
+            color: white;
+            padding: 2rem;
+            text-align: center;
+        }
+        .match-header h1 {
+            margin: 0;
+            font-size: 2.5rem;
+            font-weight: 700;
+        }
+        .similarity-badge {
+            display: inline-block;
+            background: rgba(255,255,255,0.2);
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            margin-top: 1rem;
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+        .child-details {
+            padding: 2rem;
+        }
+        .child-photo {
+            width: 200px;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 15px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            border: 5px solid #f8f9fa;
+        }
+        .info-section {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+        }
+        .info-title {
+            color: #495057;
+            font-weight: 600;
+            font-size: 1.1rem;
+            margin-bottom: 1rem;
+            border-bottom: 2px solid #dee2e6;
+            padding-bottom: 0.5rem;
+        }
+        .info-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid #e9ecef;
+        }
+        .info-item:last-child {
+            border-bottom: none;
+        }
+        .info-label {
+            font-weight: 600;
+            color: #6c757d;
+        }
+        .info-value {
+            color: #495057;
+            font-weight: 500;
+        }
+        .contact-info {
+            background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+        }
+        .action-buttons {
+            text-align: center;
+            padding: 2rem;
+            background: #f8f9fa;
+        }
+        .btn-custom {
+            padding: 0.75rem 2rem;
+            border-radius: 50px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin: 0 0.5rem;
+            transition: all 0.3s ease;
+        }
+        .btn-primary-custom {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            color: white;
+        }
+        .btn-primary-custom:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+        }
+        .btn-secondary-custom {
+            background: #6c757d;
+            border: none;
+            color: white;
+        }
+        .btn-secondary-custom:hover {
+            background: #5a6268;
+            transform: translateY(-2px);
+        }
+        .alert-success-custom {
+            background: linear-gradient(135deg, #d4edda, #c3e6cb);
+            border: none;
+            border-radius: 15px;
+            color: #155724;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="match-container">
+            <!-- Header -->
+            <div class="match-header">
+                <i class="fas fa-check-circle fa-3x mb-3"></i>
+                <h1>Match Found!</h1>
+                <div class="similarity-badge">
+                    <i class="fas fa-percentage"></i> {{ "%.1f"|format(child.similarity) }}% Match
+                </div>
+            </div>
+
+            <!-- Alert -->
+            <div class="alert alert-success-custom m-3" role="alert">
+                <i class="fas fa-info-circle me-2"></i>
+                <strong>Great news!</strong> We found a matching child in our database. Please verify the information below and contact the appropriate authorities.
+            </div>
+
+            <!-- Child Details -->
+            <div class="child-details">
+                <div class="row">
+                    <!-- Photo Section -->
+                    <div class="col-md-4 text-center mb-4">
+                        {% if child.picture_filename %}
+                            <img src="{{ url_for('uploaded_file', filename=child.picture_filename) }}" 
+                                 class="child-photo" alt="Child Photo">
+                        {% else %}
+                            <div class="child-photo d-flex align-items-center justify-content-center bg-light">
+                                <i class="fas fa-user fa-4x text-muted"></i>
+                            </div>
+                        {% endif %}
+                    </div>
+
+                    <!-- Basic Information -->
+                    <div class="col-md-8">
+                        <div class="info-section">
+                            <div class="info-title">
+                                <i class="fas fa-user me-2"></i>Personal Information
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label">Full Name:</span>
+                                <span class="info-value">{{ child.first_name }} {{ child.last_name }}</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label">Huduma Number:</span>
+                                <span class="info-value">{{ child.huduma_number }}</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label">Date of Birth:</span>
+                                <span class="info-value">{{ child.date_of_birth }}</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label">Gender:</span>
+                                <span class="info-value">{{ child.gender or 'Not specified' }}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Contact Information -->
+                <div class="info-section contact-info">
+                    <div class="info-title">
+                        <i class="fas fa-phone me-2"></i>Emergency Contact Information
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="info-item">
+                                <span class="info-label">Mother's Name:</span>
+                                <span class="info-value">{{ child.mother_first_name }} {{ child.mother_last_name }}</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label">Mother's Contact:</span>
+                                <span class="info-value">
+                                    <a href="tel:{{ child.mother_contact }}" class="text-decoration-none">
+                                        <i class="fas fa-phone me-1"></i>{{ child.mother_contact }}
+                                    </a>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            {% if child.father_first_name %}
+                            <div class="info-item">
+                                <span class="info-label">Father's Name:</span>
+                                <span class="info-value">{{ child.father_first_name }} {{ child.father_last_name }}</span>
+                            </div>
+                            {% endif %}
+                            {% if child.father_contact %}
+                            <div class="info-item">
+                                <span class="info-label">Father's Contact:</span>
+                                <span class="info-value">
+                                    <a href="tel:{{ child.father_contact }}" class="text-decoration-none">
+                                        <i class="fas fa-phone me-1"></i>{{ child.father_contact }}
+                                    </a>
+                                </span>
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Location Information -->
+                <div class="info-section">
+                    <div class="info-title">
+                        <i class="fas fa-map-marker-alt me-2"></i>Location Information
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="info-item">
+                                <span class="info-label">County:</span>
+                                <span class="info-value">{{ child.county }}</span>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="info-item">
+                                <span class="info-label">Sub-County:</span>
+                                <span class="info-value">{{ child.sub_county }}</span>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="info-item">
+                                <span class="info-label">Ward:</span>
+                                <span class="info-value">{{ child.ward }}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="action-buttons">
+                <a href="tel:{{ child.mother_contact }}" class="btn btn-primary-custom btn-custom">
+                    <i class="fas fa-phone me-2"></i>Call Mother
+                </a>
+                {% if child.father_contact %}
+                <a href="tel:{{ child.father_contact }}" class="btn btn-primary-custom btn-custom">
+                    <i class="fas fa-phone me-2"></i>Call Father
+                </a>
+                {% endif %}
+                <button onclick="window.print()" class="btn btn-secondary-custom btn-custom">
+                    <i class="fas fa-print me-2"></i>Print Details
+                </button>
+                <a href="{{ url_for('user_dashboard') }}" class="btn btn-secondary-custom btn-custom">
+                    <i class="fas fa-arrow-left me-2"></i>Back to Dashboard
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Auto-focus on important contact information
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add click-to-copy functionality for phone numbers
+            const phoneLinks = document.querySelectorAll('a[href^="tel:"]');
+            phoneLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    const phoneNumber = this.getAttribute('href').replace('tel:', '');
+                    navigator.clipboard.writeText(phoneNumber).then(() => {
+                        // Show a temporary tooltip or notification
+                        const originalText = this.innerHTML;
+                        this.innerHTML = '<i class="fas fa-check me-1"></i>Copied!';
+                        setTimeout(() => {
+                            this.innerHTML = originalText;
+                        }, 2000);
+                    });
+                });
+            });
+        });
+    </script>
+</body>
+</html>

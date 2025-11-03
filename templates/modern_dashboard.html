@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SafeFind Dashboard - Missing Persons System</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='modern_styles.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <a href="{{ url_for('landing_page') }}" class="navbar-brand">
+                    <i class="fas fa-shield-heart"></i> SafeFind
+                </a>
+                <div style="display: flex; gap: 1rem; align-items: center;">
+                    <span style="color: rgba(255,255,255,0.8);">
+                        <i class="fas fa-user"></i> {{ session.username }}
+                        {% if session.role == 'admin' %}
+                            <span style="background: linear-gradient(135deg, #f39c12, #e67e22); color: white; padding: 0.3rem 0.8rem; border-radius: 20px; font-size: 0.85rem; margin-left: 0.5rem; font-weight: 600; box-shadow: 0 2px 8px rgba(243, 156, 18, 0.3);">
+                                <i class="fas fa-crown"></i> Admin
+                            </span>
+                        {% else %}
+                            <span style="background: linear-gradient(135deg, #3498db, #2980b9); color: white; padding: 0.3rem 0.8rem; border-radius: 20px; font-size: 0.85rem; margin-left: 0.5rem; font-weight: 600; box-shadow: 0 2px 8px rgba(52, 152, 219, 0.3);">
+                                <i class="fas fa-user-check"></i> User
+                            </span>
+                        {% endif %}
+                    </span>
+                    <a href="{{ url_for('logout') }}" class="btn btn-danger">
+                        <i class="fas fa-sign-out-alt"></i> Logout
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero" style="padding: 2rem 0;">
+        <div class="container">
+            <h1 style="font-size: 2.5rem;">
+                <i class="fas fa-tachometer-alt"></i>
+                {% if session.role == 'admin' %}Admin{% else %}User{% endif %} Dashboard
+            </h1>
+            <p>
+                Advanced missing persons management system with AI-powered facial recognition
+            </p>
+        </div>
+    </section>
+
+    <!-- Flash Messages -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <div class="container">
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ 'danger' if category == 'error' else category }}">
+                        <i class="fas fa-{{ 'exclamation-triangle' if category == 'error' else 'info-circle' if category == 'info' else 'check-circle' }}"></i>
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    {% endwith %}
+
+    <!-- Match Details Alert -->
+    {% if session.match_details %}
+        <div class="container">
+            <div class="alert alert-success" style="background: linear-gradient(135deg, rgba(67, 233, 123, 0.1), rgba(56, 249, 215, 0.1)); border-left: 4px solid #43e97b;">
+                <h4><i class="fas fa-check-circle"></i> Match Found!</h4>
+                <p>A matching person has been found in the database.</p>
+                <a href="{{ url_for('match_details') }}" class="btn btn-success">
+                    <i class="fas fa-eye"></i> View Match Details
+                </a>
+            </div>
+        </div>
+    {% endif %}
+
+    <!-- Main Dashboard -->
+    <div class="container">
+        <!-- Quick Stats -->
+        <div class="stats-grid">
+            <div class="stat-card glass-card">
+                <div class="stat-number">
+                    <i class="fas fa-users"></i>
+                </div>
+                <h4>Total Cases</h4>
+                <p>Active missing persons cases</p>
+            </div>
+            
+            <div class="stat-card glass-card">
+                <div class="stat-number">
+                    <i class="fas fa-search"></i>
+                </div>
+                <h4>AI Searches</h4>
+                <p>Facial recognition searches today</p>
+            </div>
+            
+            <div class="stat-card glass-card">
+                <div class="stat-number">
+                    <i class="fas fa-heart"></i>
+                </div>
+                <h4>Reunited</h4>
+                <p>Successful reunifications</p>
+            </div>
+            
+            <div class="stat-card glass-card">
+                <div class="stat-number">
+                    <i class="fas fa-clock"></i>
+                </div>
+                <h4>Response Time</h4>
+                <p>Average case response</p>
+            </div>
+        </div>
+
+        <!-- Action Cards -->
+        <div class="dashboard-grid">
+            <!-- Register Missing Person -->
+            <div class="dashboard-card glass-card register">
+                <div style="text-align: center; margin-bottom: 1.5rem;">
+                    <div style="font-size: 3rem; color: #667eea; margin-bottom: 1rem;">
+                        <i class="fas fa-user-plus"></i>
+                    </div>
+                    <h3 style="color: #2c3e50; margin-bottom: 0.5rem;">Register Missing Person</h3>
+                    <p style="color: #666; margin-bottom: 1.5rem;">
+                        Add a new missing person case with comprehensive details and photo for AI recognition.
+                    </p>
+                </div>
+                
+                <!-- Person Type Selection -->
+                <div style="margin-bottom: 1.5rem;">
+                    <label style="display: block; margin-bottom: 0.5rem; font-weight: 600;">Select Person Type:</label>
+                    <div style="display: grid; gap: 0.5rem;">
+                        <button class="btn btn-primary" onclick="registerPerson('child')" style="justify-content: flex-start;">
+                            <i class="fas fa-child"></i> Missing Child
+                        </button>
+                        <button class="btn btn-primary" onclick="registerPerson('adult_vulnerable')" style="justify-content: flex-start;">
+                            <i class="fas fa-user-injured"></i> Vulnerable Adult
+                        </button>
+                        <button class="btn btn-primary" onclick="registerPerson('adult_general')" style="justify-content: flex-start;">
+                            <i class="fas fa-user"></i> General Missing Person
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Search for Missing Person -->
+            <div class="dashboard-card glass-card search">
+                <div style="text-align: center; margin-bottom: 1.5rem;">
+                    <div style="font-size: 3rem; color: #4facfe; margin-bottom: 1rem;">
+                        <i class="fas fa-search"></i>
+                    </div>
+                    <h3 style="color: #2c3e50; margin-bottom: 0.5rem;">AI-Powered Search</h3>
+                    <p style="color: #666; margin-bottom: 1.5rem;">
+                        Upload a photo to search for matching persons using advanced facial recognition technology.
+                    </p>
+                </div>
+                
+                <form action="{{ url_for('search_lost_child') }}" method="post" enctype="multipart/form-data">
+                    <div class="upload-area" onclick="document.getElementById('searchPhoto').click()">
+                        <div class="upload-icon">
+                            <i class="fas fa-camera"></i>
+                        </div>
+                        <p><strong>Click to upload photo</strong></p>
+                        <p style="font-size: 0.9rem; color: #666;">Supports JPG, PNG, GIF (max 16MB)</p>
+                        <input type="file" id="searchPhoto" name="lost_child_photo" accept="image/*" style="display: none;" onchange="updateFileName(this)">
+                    </div>
+                    <div id="fileName" style="margin-top: 0.5rem; font-size: 0.9rem; color: #666;"></div>
+                    <button type="submit" class="btn btn-success" style="width: 100%; margin-top: 1rem;">
+                        <i class="fas fa-brain"></i> Start AI Search
+                    </button>
+                </form>
+            </div>
+
+            <!-- Retrieve Person Information -->
+            <div class="dashboard-card glass-card retrieve">
+                <div style="text-align: center; margin-bottom: 1.5rem;">
+                    <div style="font-size: 3rem; color: #43e97b; margin-bottom: 1rem;">
+                        <i class="fas fa-id-card"></i>
+                    </div>
+                    <h3 style="color: #2c3e50; margin-bottom: 0.5rem;">Retrieve Person Info</h3>
+                    <p style="color: #666; margin-bottom: 1.5rem;">
+                        Search for person information using ID number, name, or other identifying details.
+                    </p>
+                </div>
+                
+                <form action="{{ url_for('retrieve_child_info_route') }}" method="post">
+                    <div class="form-group">
+                        <label class="form-label">Search by ID Number:</label>
+                        <input type="text" name="huduma_number" class="form-control" placeholder="Enter ID/Huduma number" required>
+                    </div>
+                    <button type="submit" class="btn btn-success" style="width: 100%;">
+                        <i class="fas fa-search"></i> Search Records
+                    </button>
+                </form>
+            </div>
+
+            {% if session.role == 'admin' %}
+            <!-- Admin-Only Features -->
+            <div class="dashboard-card glass-card" style="border-top-color: #fa709a;">
+                <div style="text-align: center; margin-bottom: 1.5rem;">
+                    <div style="font-size: 3rem; color: #fa709a; margin-bottom: 1rem;">
+                        <i class="fas fa-cog"></i>
+                    </div>
+                    <h3 style="color: #2c3e50; margin-bottom: 0.5rem;">Admin Controls</h3>
+                    <p style="color: #666; margin-bottom: 1.5rem;">
+                        Administrative functions for system management and user control.
+                    </p>
+                </div>
+                
+                <div style="display: grid; gap: 0.5rem;">
+                    <button class="btn btn-primary" onclick="manageUsers()" style="justify-content: flex-start;">
+                        <i class="fas fa-users-cog"></i> Manage Users
+                    </button>
+                    <button class="btn btn-primary" onclick="viewReports()" style="justify-content: flex-start;">
+                        <i class="fas fa-chart-bar"></i> View Reports
+                    </button>
+                    <button class="btn btn-primary" onclick="systemSettings()" style="justify-content: flex-start;">
+                        <i class="fas fa-server"></i> System Settings
+                    </button>
+                </div>
+            </div>
+
+            <!-- Case Management -->
+            <div class="dashboard-card glass-card" style="border-top-color: #f093fb;">
+                <div style="text-align: center; margin-bottom: 1.5rem;">
+                    <div style="font-size: 3rem; color: #f093fb; margin-bottom: 1rem;">
+                        <i class="fas fa-folder-open"></i>
+                    </div>
+                    <h3 style="color: #2c3e50; margin-bottom: 0.5rem;">Case Management</h3>
+                    <p style="color: #666; margin-bottom: 1.5rem;">
+                        Manage active cases, update status, and track investigation progress.
+                    </p>
+                </div>
+                
+                <div style="display: grid; gap: 0.5rem;">
+                    <button class="btn btn-primary" onclick="viewActiveCases()" style="justify-content: flex-start;">
+                        <i class="fas fa-list"></i> Active Cases
+                    </button>
+                    <button class="btn btn-primary" onclick="updateCaseStatus()" style="justify-content: flex-start;">
+                        <i class="fas fa-edit"></i> Update Status
+                    </button>
+                    <button class="btn btn-primary" onclick="generateReport()" style="justify-content: flex-start;">
+                        <i class="fas fa-file-pdf"></i> Generate Report
+                    </button>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+
+        <!-- Recent Activity -->
+        <div style="margin-top: 3rem;">
+            <h3 style="color: white; margin-bottom: 1rem;">
+                <i class="fas fa-history"></i> Recent Activity
+            </h3>
+            <div class="glass-card" style="padding: 1.5rem;">
+                <div style="text-align: center; color: #666;">
+                    <i class="fas fa-clock" style="font-size: 2rem; margin-bottom: 1rem; opacity: 0.5;"></i>
+                    <p>No recent activity to display.</p>
+                    <p style="font-size: 0.9rem;">Recent searches, registrations, and matches will appear here.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Floating Help Button -->
+    <button class="fab" onclick="showHelp()" title="Help & Support">
+        <i class="fas fa-question"></i>
+    </button>
+
+    <script>
+        function updateFileName(input) {
+            const fileName = document.getElementById('fileName');
+            if (input.files.length > 0) {
+                fileName.textContent = `Selected: ${input.files[0].name}`;
+                fileName.style.color = '#43e97b';
+            }
+        }
+
+        function registerPerson(type) {
+            const routes = {
+                'child': '{{ url_for("register_child") }}',
+                'adult_vulnerable': '/register_vulnerable_adult',
+                'adult_general': '/register_missing_person'
+            };
+            
+            // For now, redirect to child registration (will be updated)
+            window.location.href = routes['child'];
+        }
+
+        function manageUsers() {
+            alert('User management feature coming soon!');
+        }
+
+        function viewReports() {
+            alert('Reports feature coming soon!');
+        }
+
+        function systemSettings() {
+            alert('System settings feature coming soon!');
+        }
+
+        function viewActiveCases() {
+            alert('Active cases view coming soon!');
+        }
+
+        function updateCaseStatus() {
+            alert('Case status update feature coming soon!');
+        }
+
+        function generateReport() {
+            alert('Report generation feature coming soon!');
+        }
+
+        function showHelp() {
+            alert('SafeFind Help & Support\n\n' +
+                  '🔍 AI Search: Upload a clear photo for facial recognition\n' +
+                  '📝 Registration: Add missing persons with detailed information\n' +
+                  '🆔 ID Search: Find records using identification numbers\n' +
+                  '📞 Emergency: Contact local authorities for urgent cases\n\n' +
+                  'For technical support, contact your system administrator.');
+        }
+
+        // Add loading states and animations
+        document.addEventListener('DOMContentLoaded', function() {
+            // Animate cards on load
+            const cards = document.querySelectorAll('.dashboard-card, .stat-card');
+            cards.forEach((card, index) => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(30px)';
+                
+                setTimeout(() => {
+                    card.style.transition = 'all 0.6s cubic-bezier(0.4, 0, 0.2, 1)';
+                    card.style.opacity = '1';
+                    card.style.transform = 'translateY(0)';
+                }, index * 100);
+            });
+
+            // Add form validation
+            const forms = document.querySelectorAll('form');
+            forms.forEach(form => {
+                form.addEventListener('submit', function(e) {
+                    const submitBtn = form.querySelector('button[type="submit"]');
+                    if (submitBtn) {
+                        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
+                        submitBtn.disabled = true;
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Update Child Information</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+            padding: 20px;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .card {
+            margin-bottom: 20px;
+        }
+        .card-header {
+            background-color: #007bff;
+            color: #fff;
+        }
+        .card-body {
+            padding: 20px;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2 class="mb-4">Update Child Information</h2>
+
+        <form method="POST" action="/update_child_submit">
+            <input type="hidden" name="huduma_number" value="{{ child[3] }}">
+
+            <!-- Child's Details -->
+            <div class="form-group">
+                <label for="first_name">First Name:</label>
+                <input type="text" class="form-control" name="first_name" value="{{ child[1] }}" required>
+            </div>
+            <div class="form-group">
+                <label for="last_name">Last Name:</label>
+                <input type="text" class="form-control" name="last_name" value="{{ child[2] }}" required>
+            </div>
+            <div class="form-group">
+                <label for="dob">Date of Birth (DOB):</label>
+                <input type="date" class="form-control" name="dob" value="{{ child[4] }}" required>
+            </div>
+
+            <!-- Gender -->
+            <div class="form-group">
+                <label for="gender">Gender:</label>
+                <select class="form-control" name="gender" required>
+                    <option value="male" {% if child[5] == 'male' %} selected {% endif %}>Male</option>
+                    <option value="female" {% if child[5] == 'female' %} selected {% endif %}>Female</option>
+                    <option value="other" {% if child[5] == 'other' %} selected {% endif %}>Other</option>
+                </select>
+            </div>
+
+            <!-- Parents' Details -->
+            <div class="form-group">
+                <label for="mother_first_name">Mother's First Name:</label>
+                <input type="text" class="form-control" name="mother_first_name" value="{{ child[6] }}" required>
+            </div>
+            <div class="form-group">
+                <label for="mother_last_name">Mother's Last Name:</label>
+                <input type="text" class="form-control" name="mother_last_name" value="{{ child[7] }}" required>
+            </div>
+            <div class="form-group">
+                <label for="father_first_name">Father's First Name:</label>
+                <input type="text" class="form-control" name="father_first_name" value="{{ child[8] }}" required>
+            </div>
+            <div class="form-group">
+                <label for="father_last_name">Father's Last Name:</label>
+                <input type="text" class="form-control" name="father_last_name" value="{{ child[9] }}" required>
+            </div>
+            <div class="form-group">
+                <label for="mother_contact">Mother's Contact:</label>
+                <input type="text" class="form-control" name="mother_contact" value="{{ child[10] }}" required>
+            </div>
+            <div class="form-group">
+                <label for="father_contact">Father's Contact:</label>
+                <input type="text" class="form-control" name="father_contact" value="{{ child[11] }}" required>
+            </div>
+
+            <!-- Location Details -->
+            <div class="form-group">
+                <label for="county">County:</label>
+                <input type="text" class="form-control" name="county" value="{{ child[12] }}">
+            </div>
+            <div class="form-group">
+                <label for="sub_county">Sub-County:</label>
+                <input type="text" class="form-control" name="sub_county" value="{{ child[13] }}">
+            </div>
+            <div class="form-group">
+                <label for="ward">Ward:</label>
+                <input type="text" class="form-control" name="ward" value="{{ child[14] }}">
+            </div>
+
+            <!-- Child's Photo -->
+            <div class="form-group">
+                <label for="photo">Child's Photo (optional):</label>
+                <input type="file" class="form-control-file" name="photo">
+            </div>
+
+            <button class="btn btn-primary" type="submit">Update Child Information</button>
+        </form>
+    </div>
+</body>
+</html>
+
+

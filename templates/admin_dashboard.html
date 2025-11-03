@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #2c3e50; /* Dark background color */
+            font-family: 'Montserrat', sans-serif;
+            color: #ffffff;
+            padding: 20px;
+        }
+        .container {
+            max-width: 800px;
+            margin: auto;
+        }
+        .btn-action {
+            margin-top: 10px;
+        }
+        .resizable-img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease-in-out;
+        }
+        .resizable-img:hover {
+            transform: scale(1.05);
+        }
+        .card {
+            border-radius: 12px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+            background-color: #34495e; /* Card background color */
+            color: #ffffff; /* Text color */
+        }
+        .card-header {
+            background-color: #2980b9; /* Header background color */
+            color: #ffffff;
+            border-radius: 12px 12px 0 0;
+        }
+        .card-body {
+            padding: 20px;
+        }
+        .alert {
+            border-radius: 12px;
+        }
+        /* Search animation */
+        .search-animation {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 1000;
+            display: none;
+        }
+        .dimmed-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="card mb-4">
+            <div class="card-header">
+                <h2 class="mb-0">Admin Dashboard</h2>
+            </div>
+            <div class="card-body">
+                <!-- Child Registration Section -->
+                <h3>Child Registration</h3>
+                <a href="{{ url_for('register_child') }}" class="btn btn-primary btn-action">Register Child</a>
+                <hr>
+
+                <!-- Retrieve Child Information Section -->
+                <h3>Retrieve Child Information</h3>
+                <form action="{{ url_for('retrieve_child_information') }}" method="POST" class="mb-3">
+                    <div class="input-group">
+                        <input type="text" class="form-control" placeholder="Enter Huduma Number" name="huduma_number">
+                        <button class="btn btn-primary" type="submit">Retrieve Child Information</button>
+                    </div>
+                </form>
+                <hr>
+
+                <!-- Search Lost Child Section -->
+                <h3>Search Lost Child</h3>
+                <form id="search-form" action="{{ url_for('search_lost_child') }}" method="post" enctype="multipart/form-data">
+                    <div class="mb-3">
+                        <label for="lost_child_photo" class="form-label">Upload Lost Child Photo</label>
+                        <input type="file" class="form-control" id="lost_child_photo" name="lost_child_photo" accept="image/*" required>
+                    </div>
+                    <button id="search-button" type="submit" class="btn btn-primary">Search Lost Child</button>
+                </form>
+                <hr>
+
+                <!-- Delete Child Section -->
+                <h3>Delete Child</h3>
+                <form action="{{ url_for('delete_child') }}" method="POST" class="mb-3">
+                    <div class="input-group">
+                        <input type="text" class="form-control" placeholder="Enter Huduma Number" name="huduma_number">
+                        <button class="btn btn-danger" type="submit">Delete Child</button>
+                    </div>
+                </form>
+                <hr>
+
+                <!-- Admin Actions Section -->
+                <h3>Admin Actions</h3>
+                <form action="{{ url_for('admin_dashboard') }}" method="POST" class="mb-3">
+                    <div class="input-group">
+                        <input type="text" class="form-control" placeholder="Enter User ID" name="user_id">
+                        <select class="form-select" name="action">
+                            <option value="promote">Promote to Admin</option>
+                            <option value="demote">Demote to User</option>
+                        </select>
+                        <button class="btn btn-primary" type="submit">Submit</button>
+                    </div>
+                </form>
+
+                <!-- Match Details Link -->
+                {% if session.match_details %}
+                    <div class="alert alert-success">
+                        <h4><i class="fas fa-check-circle"></i> Match Found!</h4>
+                        <p>A matching child has been found in the database.</p>
+                        <a href="{{ url_for('match_details') }}" class="btn btn-success">
+                            <i class="fas fa-eye"></i> View Match Details
+                        </a>
+                    </div>
+                    <hr>
+                {% endif %}
+
+                <!-- Flash Messages -->
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                    {% if messages %}
+                        {% for category, message in messages %}
+                            <div class="alert alert-{% if category == 'error' %}danger{% elif category == 'warning' %}warning{% elif category == 'info' %}info{% else %}success{% endif %}">
+                                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                                <p>{{ message }}</p>
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                {% endwith %}
+            </div>
+        </div>
+
+        <!-- Logout Button -->
+        <a href="{{ url_for('logout') }}" class="btn btn-danger">Logout</a>
+    </div>
+
+    <!-- Search Animation -->
+    <div id="search-animation" class="search-animation">
+        <i class="fas fa-spinner fa-spin fa-5x"></i>
+    </div>
+    <!-- Dimmed Background -->
+    <div id="dimmed-background" class="dimmed-background"></div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <!-- Font Awesome -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/js/all.min.js"></script>
+    <script>
+        document.getElementById('search-form').addEventListener('submit', function(event) {
+            // Display search animation and dimmed background
+            document.getElementById('search-animation').style.display = 'block';
+            document.getElementById('dimmed-background').style.display = 'block';
+
+            // Simulate delay for search (you can replace setTimeout with actual search process)
+            setTimeout(function() {
+                // Hide search animation and dimmed background after delay
+                document.getElementById('search-animation').style.display = 'none';
+                document.getElementById('dimmed-background').style.display = 'none';
+            }, 3000); // Change 3000 to your actual search process time in milliseconds
+        });
+    </script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
